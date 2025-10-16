@@ -14,40 +14,76 @@
         </header>
         
         <main>
+            <!-- Card de Configuração de Interesses -->
+            <div class="card">
+                <h2>🎯 Configurar Seus Interesses</h2>
+                
+                <!-- Seleção de Nível -->
+                <div class="form-group">
+                    <label><strong>Seu Nível de Conhecimento:</strong></label>
+                    <div class="nivel-buttons">
+                        <button onclick="setNivel(1)" class="btn-nivel" id="nivel1">🥚 Iniciante</button>
+                        <button onclick="setNivel(2)" class="btn-nivel" id="nivel2">🐣 Intermediário</button>
+                        <button onclick="setNivel(3)" class="btn-nivel" id="nivel3">🦅 Avançado</button>
+                    </div>
+                    <p id="current-nivel">Nível atual: <strong>Iniciante</strong></p>
+                </div>
+
+                <!-- Seleção de Áreas -->
+                <div class="form-group">
+                    <label><strong>Selecione suas Áreas de Interesse:</strong></label>
+                    <div class="areas-grid">
+                        <div class="area-checkbox">
+                            <input type="checkbox" id="area-programacao" value="programacao">
+                            <label for="area-programacao">💻 Programação</label>
+                        </div>
+                        <div class="area-checkbox">
+                            <input type="checkbox" id="area-calculo" value="calculo">
+                            <label for="area-calculo">📐 Cálculo</label>
+                        </div>
+                        <div class="area-checkbox">
+                            <input type="checkbox" id="area-matematica-discreta" value="matematica-discreta">
+                            <label for="area-matematica-discreta">🔢 Matemática Discreta</label>
+                        </div>
+                        <div class="area-checkbox">
+                            <input type="checkbox" id="area-fisica" value="fisica">
+                            <label for="area-fisica">⚛️ Física</label>
+                        </div>
+                        <div class="area-checkbox">
+                            <input type="checkbox" id="area-engenharia-software" value="engenharia-software">
+                            <label for="area-engenharia-software">🏗️ Engenharia de Software</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="loadRecommendations()" class="btn btn-primary">
+                    🎯 Gerar Recomendações Personalizadas
+                </button>
+            </div>
+
             <!-- Card de Recomendações -->
             <div class="card">
-                <h2>🎯 Materiais Recomendados para Você</h2>
+                <h2>📚 Materiais Recomendados para Você</h2>
+                <div id="recommendations-info">
+                    <p>Selecione suas áreas de interesse e nível acima</p>
+                </div>
                 <div id="recommendations-loading">
-                    <p>🔄 Carregando recomendações...</p>
+                    <!-- Loading será mostrado aqui -->
                 </div>
                 <div id="recommendations-list"></div>
-                <button onclick="loadRecommendations()" class="btn btn-primary">
-                    🔄 Atualizar Recomendações
-                </button>
             </div>
 
-            <!-- Card de Interesses -->
+            <!-- Card de Explorar por Área -->
             <div class="card">
-                <h2>🏷️ Seus Interesses</h2>
-                <div class="form-group">
-                    <label>Adicionar interesses (separados por vírgula):</label>
-                    <input type="text" id="new-interests" placeholder="ex: python, web, beginner">
-                    <button onclick="addInterests()" class="btn btn-secondary" style="margin-top: 10px;">
-                        ➕ Adicionar Interesses
-                    </button>
+                <h2>🔍 Explorar Materiais por Área</h2>
+                <div class="areas-buttons">
+                    <button onclick="exploreArea('programacao')" class="btn-area">💻 Programação</button>
+                    <button onclick="exploreArea('calculo')" class="btn-area">📐 Cálculo</button>
+                    <button onclick="exploreArea('matematica-discreta')" class="btn-area">🔢 Matemática Discreta</button>
+                    <button onclick="exploreArea('fisica')" class="btn-area">⚛️ Física</button>
+                    <button onclick="exploreArea('engenharia-software')" class="btn-area">🏗️ Engenharia de Software</button>
                 </div>
-                <div id="current-interests">
-                    <p>Seus interesses atuais aparecerão aqui</p>
-                </div>
-            </div>
-
-            <!-- Card de Todos os Materiais -->
-            <div class="card">
-                <h2>📚 Todos os Materiais Disponíveis</h2>
-                <button onclick="loadAllMaterials()" class="btn btn-secondary">
-                    📖 Ver Todos os Materiais
-                </button>
-                <div id="all-materials" style="margin-top: 15px;"></div>
+                <div id="explore-results" style="margin-top: 20px;"></div>
             </div>
 
             <!-- Logout -->
@@ -65,17 +101,85 @@
     <script src="js/auth.js"></script>
     <script src="js/recommendations.js"></script>
     <script>
+        let currentNivel = 1;
+        let currentAreas = [];
+
         // Quando a página carrega
         document.addEventListener('DOMContentLoaded', function() {
-            // Verifica se está logado
             if (!checkAuth()) {
                 return;
             }
-            
-            // Carrega recomendações automaticamente
-            loadRecommendations();
-            loadAllMaterials();
+            setNivel(1); // Define nível padrão
         });
+
+        // Definir nível do usuário
+        function setNivel(nivel) {
+            currentNivel = nivel;
+            
+            // Atualiza visual dos botões
+            document.querySelectorAll('.btn-nivel').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(`nivel${nivel}`).classList.add('active');
+            
+            // Atualiza texto
+            const nivelText = nivel === 1 ? 'Iniciante' : nivel === 2 ? 'Intermediário' : 'Avançado';
+            document.getElementById('current-nivel').innerHTML = `Nível atual: <strong>${nivelText}</strong>`;
+            
+            // Atualiza no servidor
+            updateUserNivel(nivel);
+        }
+
+        // Atualizar nível no servidor
+        async function updateUserNivel(nivel) {
+            try {
+                await fetch('http://localhost:8000/recommendation/user/current/level', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getToken()}`
+                    },
+                    body: JSON.stringify({ level: nivel })
+                });
+            } catch (error) {
+                console.log('Erro ao atualizar nível:', error);
+            }
+        }
+
+        // Explorar materiais por área
+        async function exploreArea(area) {
+            const resultsDiv = document.getElementById('explore-results');
+            resultsDiv.innerHTML = '<p>🔄 Carregando materiais...</p>';
+            
+            try {
+                const response = await fetch(`http://localhost:8000/recommendation/materials/area/${area}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    let html = `<h3>📚 ${data.area_name} (${data.total} materiais)</h3>`;
+                    
+                    data.materials.forEach(material => {
+                        html += `
+                            <div class="material-card">
+                                <h4>${material.image} ${material.title}</h4>
+                                <p><strong>Autor:</strong> ${material.author} | <strong>Nível:</strong> ${material.difficulty}</p>
+                                <p><strong>Páginas:</strong> ${material.pages} | <strong>Ano:</strong> ${material.year}</p>
+                                <p>${material.description}</p>
+                                <div class="tags">
+                                    ${material.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    resultsDiv.innerHTML = html;
+                } else {
+                    resultsDiv.innerHTML = `<div class="error">❌ Erro ao carregar materiais</div>`;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = '<div class="error">❌ Erro de conexão</div>';
+            }
+        }
     </script>
 </body>
 </html>

@@ -1,18 +1,25 @@
-// js/recommendations.js - Funções de recomendação
+// js/recommendations.js - Sistema Avançado de Recomendações
 
 const RECOMMENDATION_API = 'http://localhost:8000/recommendation';
 
-// Carregar recomendações
+// Carregar recomendações baseadas nas áreas selecionadas
 async function loadRecommendations() {
     const loadingDiv = document.getElementById('recommendations-loading');
     const listDiv = document.getElementById('recommendations-list');
+    const infoDiv = document.getElementById('recommendations-info');
     
-    // Interesses padrão (poderia vir do perfil do usuário)
-    const defaultInterests = ['python', 'beginner', 'programming'];
+    // Obter áreas selecionadas
+    const selectedAreas = getSelectedAreas();
+    
+    if (selectedAreas.length === 0) {
+        infoDiv.innerHTML = '<div class="error">⚠️ Selecione pelo menos uma área de interesse</div>';
+        return;
+    }
     
     try {
         loadingDiv.innerHTML = '<p>🔄 Buscando recomendações personalizadas...</p>';
         listDiv.innerHTML = '';
+        infoDiv.innerHTML = `<p>🎯 Buscando recomendações para: <strong>${selectedAreas.join(', ')}</strong> no nível <strong>${getNivelText()}</strong></p>`;
         
         const response = await fetch(`${RECOMMENDATION_API}/recommend`, {
             method: 'POST',
@@ -21,9 +28,10 @@ async function loadRecommendations() {
                 'Authorization': `Bearer ${getToken()}`
             },
             body: JSON.stringify({
-                user_id: 'user_' + Date.now(), // ID temporário
-                interests: defaultInterests,
-                top_n: 4
+                user_id: 'user_' + Date.now(),
+                areas: selectedAreas,
+                nivel: currentNivel,
+                top_n: 8
             })
         });
         
@@ -33,12 +41,15 @@ async function loadRecommendations() {
             loadingDiv.innerHTML = '';
             
             if (data.recommendations && data.recommendations.length > 0) {
+                listDiv.innerHTML = `<h3>🎯 ${data.total_recommended} Recomendações Encontradas</h3>`;
+                
                 data.recommendations.forEach(material => {
                     const materialCard = `
                         <div class="material-card">
-                            <h4>${material.title}</h4>
-                            <p><strong>Tipo:</strong> ${material.type} | <strong>Dificuldade:</strong> ${material.difficulty}</p>
-                            <p>${material.description || 'Sem descrição'}</p>
+                            <h4>${material.image} ${material.title}</h4>
+                            <p><strong>Autor:</strong> ${material.author} | <strong>Nível:</strong> ${material.difficulty}</p>
+                            <p><strong>Páginas:</strong> ${material.pages} | <strong>Ano:</strong> ${material.year}</p>
+                            <p>${material.description}</p>
                             <div class="tags">
                                 ${material.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                             </div>
@@ -47,7 +58,7 @@ async function loadRecommendations() {
                     listDiv.innerHTML += materialCard;
                 });
             } else {
-                listDiv.innerHTML = '<p>😔 Nenhuma recomendação encontrada para seus interesses.</p>';
+                listDiv.innerHTML = '<div class="error">😔 Nenhuma recomendação encontrada para suas áreas selecionadas.</div>';
             }
             
         } else {
@@ -59,54 +70,38 @@ async function loadRecommendations() {
     }
 }
 
-// Carregar todos os materiais
-async function loadAllMaterials() {
-    const materialsDiv = document.getElementById('all-materials');
+// Obter áreas selecionadas
+function getSelectedAreas() {
+    const areas = [];
+    const checkboxes = document.querySelectorAll('.area-checkbox input[type="checkbox"]');
     
-    try {
-        const response = await fetch(`${RECOMMENDATION_API}/materials`);
-        const data = await response.json();
-        
-        if (response.ok) {
-            materialsDiv.innerHTML = '<h4>Materiais Disponíveis:</h4>';
-            
-            data.materials.forEach(material => {
-                const materialCard = `
-                    <div class="material-card">
-                        <h4>${material.title}</h4>
-                        <p><strong>Tipo:</strong> ${material.type} | <strong>Dificuldade:</strong> ${material.difficulty}</p>
-                        <p>${material.description || 'Sem descrição'}</p>
-                        <div class="tags">
-                            ${material.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                        </div>
-                    </div>
-                `;
-                materialsDiv.innerHTML += materialCard;
-            });
-            
-        } else {
-            materialsDiv.innerHTML = `<div class="error">❌ Erro ao carregar materiais</div>`;
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            areas.push(checkbox.value);
         }
-        
+    });
+    
+    return areas;
+}
+
+// Obter texto do nível
+function getNivelText() {
+    return currentNivel === 1 ? 'Iniciante' : currentNivel === 2 ? 'Intermediário' : 'Avançado';
+}
+
+// Carregar todas as áreas disponíveis (para debug)
+async function loadAreas() {
+    try {
+        const response = await fetch(`${RECOMMENDATION_API}/areas`);
+        const data = await response.json();
+        console.log('Áreas disponíveis:', data.areas);
     } catch (error) {
-        materialsDiv.innerHTML = '<div class="error">❌ Erro de conexão</div>';
+        console.log('Erro ao carregar áreas:', error);
     }
 }
 
-// Adicionar interesses
-async function addInterests() {
-    const interestsInput = document.getElementById('new-interests');
-    const interestsDiv = document.getElementById('current-interests');
-    
-    const newInterests = interestsInput.value.split(',').map(i => i.trim()).filter(i => i);
-    
-    if (newInterests.length === 0) {
-        alert('Por favor, digite pelo menos um interesse.');
-        return;
-    }
-    
-    interestsDiv.innerHTML = `<p>✅ Interesses adicionados: ${newInterests.join(', ')}</p>
-                             <p><small>Recarregue as recomendações para ver os resultados.</small></p>`;
-    
-    interestsInput.value = '';
-}
+// Inicializar
+document.addEventListener('DOMContentLoaded', function() {
+    loadAreas();
+});
+

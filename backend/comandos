@@ -1,0 +1,20 @@
+
+.
+#COMANDOS PARA RODAR O PROJETO - COPIAR E COLAR
+#
+# TERMINAL 1 - RECOMMENDATION SERVICE:
+# cd C:\ava-microservices\backend\microservices\recommendation-service
+# python run.py
+#
+# TERMINAL 2 - AUTH SERVICE:
+# cd C:\ava-microservices\backend\microservices\auth-service  
+# python run.py
+#
+# TERMINAL 3 - API GATEWAY:
+# cd C:\ava-microservices\backend\api-gateway
+# python run.py
+#
+# TERMINAL 4 - FRONTEND:
+# cd C:\ava-microservices\frontend
+# start index.html
+#
