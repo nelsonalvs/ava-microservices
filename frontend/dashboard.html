@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AVA</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Dashboard AVA</h1>
+            <p>Bem-vindo, <span id="username">Usuário</span>!</p>
+        </header>
+        
+        <main>
+            <!-- Card de Recomendações -->
+            <div class="card">
+                <h2>🎯 Materiais Recomendados para Você</h2>
+                <div id="recommendations-loading">
+                    <p>🔄 Carregando recomendações...</p>
+                </div>
+                <div id="recommendations-list"></div>
+                <button onclick="loadRecommendations()" class="btn btn-primary">
+                    🔄 Atualizar Recomendações
+                </button>
+            </div>
+
+            <!-- Card de Interesses -->
+            <div class="card">
+                <h2>🏷️ Seus Interesses</h2>
+                <div class="form-group">
+                    <label>Adicionar interesses (separados por vírgula):</label>
+                    <input type="text" id="new-interests" placeholder="ex: python, web, beginner">
+                    <button onclick="addInterests()" class="btn btn-secondary" style="margin-top: 10px;">
+                        ➕ Adicionar Interesses
+                    </button>
+                </div>
+                <div id="current-interests">
+                    <p>Seus interesses atuais aparecerão aqui</p>
+                </div>
+            </div>
+
+            <!-- Card de Todos os Materiais -->
+            <div class="card">
+                <h2>📚 Todos os Materiais Disponíveis</h2>
+                <button onclick="loadAllMaterials()" class="btn btn-secondary">
+                    📖 Ver Todos os Materiais
+                </button>
+                <div id="all-materials" style="margin-top: 15px;"></div>
+            </div>
+
+            <!-- Logout -->
+            <div style="text-align: center; margin-top: 30px;">
+                <button onclick="logout()" class="btn btn-secondary">
+                    🚪 Sair
+                </button>
+                <button onclick="window.location.href='index.html'" class="btn btn-primary">
+                    🏠 Página Inicial
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/recommendations.js"></script>
+    <script>
+        // Quando a página carrega
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verifica se está logado
+            if (!checkAuth()) {
+                return;
+            }
+            
+            // Carrega recomendações automaticamente
+            loadRecommendations();
+            loadAllMaterials();
+        });
+    </script>
+</body>
+</html>
