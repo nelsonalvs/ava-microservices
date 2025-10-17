@@ -71,6 +71,26 @@ Sistema de ensino online com microserviços e sistema de recomendações intelig
 
 
 
+- cd C:\ava-microservices\backend\microservices\auth-service
+- python run.py
+
+- NOVO TERMINAL:
+
+- cd C:\ava-microservices\backend\microservices\recommendation-service
+- python run.py
+
+- NOVO TERMINAL:
+
+- cd C:\ava-microservices\backend\api-gateway
+- python run.py
+
+- NOVO TERMINAL:
+
+- cd C:\ava-microservices\frontend
+- start index.html
+
+
+
 ## 🌐 Acesso
 
 - **Sistema:** `frontend/index.html`
@@ -132,10 +152,11 @@ ava-microservices/
 #### Exemplo de Request - Register:
 ```json
 {
-  "username": "usuario",
-  "email": "usuario@email.com",
-  "password": "senha123"
+  "username": "usuario",
+  "email": "usuario@email.com",
+  "password": "senha123"
 }
+
 
 ## 🔗 Endpoints da API
 
