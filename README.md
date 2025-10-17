@@ -51,23 +51,23 @@ Sistema de ensino online com microserviços e sistema de recomendações intelig
 
 #### Terminal 1 - Auth Service:
 ```bash
-cd C:\ava-microservices\backend\microservices\auth-service
-python run.py
+- cd C:\ava-microservices\backend\microservices\auth-service
+- python run.py
 
-NOVO TERMINAL:
+- NOVO TERMINAL:
 
-cd C:\ava-microservices\backend\microservices\recommendation-service
-python run.py
+- cd C:\ava-microservices\backend\microservices\recommendation-service
+- python run.py
 
-NOVO TERMINAL:
+- NOVO TERMINAL:
 
-cd C:\ava-microservices\backend\api-gateway
-python run.py
+- cd C:\ava-microservices\backend\api-gateway
+- python run.py
 
-NOVO TERMINAL:
+- NOVO TERMINAL:
 
-cd C:\ava-microservices\frontend
-start index.html
+- cd C:\ava-microservices\frontend
+- start index.html
 
 
 
