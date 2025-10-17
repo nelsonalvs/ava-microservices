@@ -7,7 +7,7 @@
 # python run.py
 #
 # TERMINAL 2 - AUTH SERVICE:
-# cd C:\ava-microservices\backend\microservices\auth-service  
+
 # python run.py
 #
 # TERMINAL 3 - API GATEWAY:
@@ -17,4 +17,5 @@
 # TERMINAL 4 - FRONTEND:
 # cd C:\ava-microservices\frontend
 # start index.html
+
 #

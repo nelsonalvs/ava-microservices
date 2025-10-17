@@ -66,6 +66,32 @@ def proxy_request(service_name, path):
                 json=request.get_json(silent=True) or {},
                 headers={key: value for key, value in request.headers if key != 'Host'}
             )
+
+
+
+
+
+
+        elif request.method == 'DELETE':  # ⬅️ ADICIONAR ESTE BLOCO
+            response = requests.delete(
+                target_url,
+                headers={key: value for key, value in request.headers if key != 'Host'}
+            )
+        elif request.method == 'PUT':     # ⬅️ ADICIONAR ESTE BLOCO
+            response = requests.put(
+                target_url,
+                json=request.get_json(silent=True) or {},
+                headers={key: value for key, value in request.headers if key != 'Host'}
+            )
+
+
+
+
+
+
+            
+
+
         else:
             return jsonify({'error': 'Método não suportado'}), 405
         
