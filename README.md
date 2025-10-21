@@ -49,47 +49,21 @@ Sistema de ensino online com microserviços e sistema de recomendações intelig
 
 **Abra 4 terminais separados:**
 
-#### Terminal 1 - Auth Service:
-```bash
-- cd C:\ava-microservices\backend\microservices\auth-service
-- python run.py
+**Terminal 1 - Auth Service:**
 
-- NOVO TERMINAL:
+- cd C:\ava-microservices\backend\microservices\auth-service python run.py
 
-- cd C:\ava-microservices\backend\microservices\recommendation-service
-- python run.py
+**Terminal 2 - Recommendation Service:**
+cd 
+C:\ava-microservices\backend\microservices\recommendation-service python run.py
 
-- NOVO TERMINAL:
+**Terminal 3 - API Gateway:**
 
-- cd C:\ava-microservices\backend\api-gateway
-- python run.py
+cd C:\ava-microservices\backend\api-gateway python run.py
 
-- NOVO TERMINAL:
+**Terminal 4 - Frontend:**
 
-- cd C:\ava-microservices\frontend
-- start index.html
-
-
-
-- cd C:\ava-microservices\backend\microservices\auth-service
-- python run.py
-
-- NOVO TERMINAL:
-
-- cd C:\ava-microservices\backend\microservices\recommendation-service
-- python run.py
-
-- NOVO TERMINAL:
-
-- cd C:\ava-microservices\backend\api-gateway
-- python run.py
-
-- NOVO TERMINAL:
-
-- cd C:\ava-microservices\frontend
-- start index.html
-
-
+cd C:\ava-microservices\frontend start index.html
 
 ## 🌐 Acesso
 
@@ -98,72 +72,34 @@ Sistema de ensino online com microserviços e sistema de recomendações intelig
 
 ## 🎯 Como Usar
 
-1. **Acesse** `frontend/index.html`
-2. **Cadastre-se** ou faça login
-3. **Selecione** áreas e nível
-4. **Gere recomendações**
-5. **Adicione livros** à lista
-6. **Acompanhe** progresso
-
+1.  **Acesse** `frontend/index.html`
+2.  **Cadastre-se** ou faça login
+3.  **Selecione** áreas e nível
+4.  **Gere recomendações**
+5.  **Adicione livros** à lista
+6.  **Acompanhe** progresso
 
 ## 🏗️ Estrutura do Projeto
-
-ava-microservices/
-├── frontend/
-│ ├── index.html
-│ ├── login.html
-│ ├── dashboard.html
-│ ├── css/
-│ │ └── style.css
-│ └── js/
-│ ├── auth.js
-│ └── recommendations.js
-├── backend/
-│ ├── api-gateway/
-│ │ ├── app/
-│ │ │ └── main.py
-│ │ └── requirements.txt
-│ └── microservices/
-│ ├── auth-service/
-│ │ ├── app/
-│ │ │ ├── main.py
-│ │ │ ├── models.py
-│ │ │ └── database.py
-│ │ └── requirements.txt
-│ └── recommendation-service/
-│ ├── app/
-│ │ ├── main.py
-│ │ ├── models.py
-│ │ └── database.py
-│ └── requirements.txt
-└── README.md
+ava-microservices/ ├── frontend/ │ ├── index.html │ ├── login.html │ ├── dashboard.html │ ├── css/ │ │ └── style.css │ └── js/ │ ├── auth.js │ └── recommendations.js ├── backend/ │ ├── api-gateway/ │ │ ├── app/ │ │ │ └── main.py │ │ └── requirements.txt │ └── microservices/ │ ├── auth-service/ │ │ ├── app/ │ │ │ ├── main.py │ │ │ ├── models.py │ │ │ └── database.py │ │ └── requirements.txt │ └── recommendation-service/ │ ├── app/ │ │ ├── main.py │ │ ├── models.py │ │ └── database.py │ └── requirements.txt └── README.md
 
 ## 🔗 Endpoints da API
 
 ### Auth Service
 
 | Método | Endpoint | Descrição |
-|--------|----------|-----------|
+| :--- | :--- | :--- |
 | `POST` | `/auth/register` | Registrar novo usuário |
 | `POST` | `/auth/login` | Fazer login |
 | `GET` | `/auth/health` | Status do serviço |
 | `GET` | `/auth/users` | Listar usuários |
 
 #### Exemplo de Request - Register:
-```json
-{
-  "username": "usuario",
-  "email": "usuario@email.com",
-  "password": "senha123"
-}
-
-
-## 🔗 Endpoints da API
+{ "username": "usuario", "email": "usuario@email.com", "password": "senha123" }
 
 ### Recommendation Service
 
 | Método | Endpoint | Descrição |
-|--------|----------|-----------|
+| :--- | :--- | :--- |
 | `POST` | `/recommendation/recommend` | Gerar recomendações personalizadas |
 | `GET` | `/recommendation/materials` | Listar todos os 30 materiais |
 | `GET` | `/recommendation/materials/area/{area_name}` | Filtrar materiais por área |
@@ -178,14 +114,8 @@ ava-microservices/
 | `GET` | `/recommendation/user/{user_id}/history` | Ver histórico do usuário |
 
 #### Exemplo de Request - Recomendação:
-```json
-{
-  "user_id": "usuario123",
-  "areas": ["programacao", "calculo"],
-  "nivel": 2,
-  "top_n": 6
-}
 
+{ "user_id": "usuario123", "areas": ["programacao", "calculo"], "nivel": 2, "top_n": 6 }
 
 ## 💾 Implementação do Banco de Dados
 
@@ -200,7 +130,7 @@ O sistema utiliza **SQLite** como banco de dados relacional, com arquivos separa
 
 #### Tabela: users (Auth Service)
 | Coluna | Tipo | Descrição | Restrições |
-|--------|------|-----------|------------|
+| :--- | :--- | :--- | :--- |
 | `id` | INTEGER | ID único do usuário | PRIMARY KEY, AUTOINCREMENT |
 | `username` | VARCHAR(80) | Nome de usuário | UNIQUE, NOT NULL |
 | `email` | VARCHAR(120) | Email do usuário | UNIQUE, NOT NULL |
@@ -210,7 +140,7 @@ O sistema utiliza **SQLite** como banco de dados relacional, com arquivos separa
 
 #### Tabela: learning_materials (Recommendation Service)
 | Coluna | Tipo | Descrição | Restrições |
-|--------|------|-----------|------------|
+| :--- | :--- | :--- | :--- |
 | `id` | INTEGER | ID único do material | PRIMARY KEY, AUTOINCREMENT |
 | `title` | VARCHAR(200) | Título do livro | NOT NULL |
 | `author` | VARCHAR(100) | Autor do livro | NOT NULL |
@@ -227,7 +157,7 @@ O sistema utiliza **SQLite** como banco de dados relacional, com arquivos separa
 
 #### Tabela: user_book_lists (Recommendation Service)
 | Coluna | Tipo | Descrição | Restrições |
-|--------|------|-----------|------------|
+| :--- | :--- | :--- | :--- |
 | `id` | INTEGER | ID único do registro | PRIMARY KEY, AUTOINCREMENT |
 | `user_id` | VARCHAR(100) | Identificador do usuário | NOT NULL |
 | `material_id` | INTEGER | Referência ao material | FOREIGN KEY |
@@ -236,7 +166,7 @@ O sistema utiliza **SQLite** como banco de dados relacional, com arquivos separa
 
 #### Tabela: user_history (Recommendation Service)
 | Coluna | Tipo | Descrição | Restrições |
-|--------|------|-----------|------------|
+| :--- | :--- | :--- | :--- |
 | `id` | INTEGER | ID único do histórico | PRIMARY KEY, AUTOINCREMENT |
 | `user_id` | VARCHAR(100) | Identificador do usuário | NOT NULL |
 | `areas` | VARCHAR(500) | Áreas de interesse | Formato: "area1,area2" |
@@ -247,50 +177,17 @@ O sistema utiliza **SQLite** como banco de dados relacional, com arquivos separa
 ### Funcionamento do Banco
 
 #### Inicialização Automática
-```python
-# Ao iniciar o Recommendation Service, o banco é populado automaticamente
-def populate_database():
-    if LearningMaterial.query.count() == 0:
-        # Insere os 30 materiais iniciais
-        materials = [
-            LearningMaterial(title="Python Fluente", ...),
-            LearningMaterial(title="Cálculo Volume 1", ...),
-            # ... 28 materiais restantes
-        ]
-        db.session.bulk_save_objects(materials)
-        db.session.commit()
+Ao iniciar o Recommendation Service, o banco é populado automaticamente com os 30 livros caso esteja vazio.
 
-
-## 💾 Banco de Dados
-
-### Como Funciona
-
-O sistema usa dois bancos de dados SQLite separados: um para autenticação e outro para recomendações.
-
-### Estrutura dos Bancos
-
-**Auth Service (auth_service.db)**
-- Tabela `users`: armazena informações dos usuários (nome, email, senha criptografada)
-
-**Recommendation Service (recommendation_service.db)**
-- Tabela `learning_materials`: 30 livros com informações completas
-- Tabela `user_book_lists`: lista pessoal de livros de cada usuário
-- Tabela `user_history`: histórico de interesses do usuário
+Ao iniciar o Recommendation Service, o banco é populado automaticamente
 
 ### Fluxo de Dados
 
-1. Usuário se cadastra → dados salvos na tabela `users`
-2. Usuário faz login → sistema verifica credenciais
-3. Usuário seleciona áreas de interesse → salvo em `user_history`
-4. Sistema gera recomendações → baseado nas áreas e nível do usuário
-5. Usuário adiciona livros à lista → salvos em `user_book_lists`
-
-### Sistema de Recomendações
-
-O sistema recomenda livros considerando:
-- Áreas de interesse selecionadas pelo usuário
-- Nível de conhecimento do usuário (iniciante, intermediário, avançado)
-- Compatibilidade entre tags dos livros e interesses do usuário
+1.  Usuário se cadastra → dados salvos na tabela `users`
+2.  Usuário faz login → sistema verifica credenciais
+3.  Usuário seleciona áreas de interesse → salvo em `user_history`
+4.  Sistema gera recomendações → baseado nas áreas e nível do usuário
+5.  Usuário adiciona livros à lista → salvos em `user_book_lists`
 
 ### Segurança
 
@@ -305,9 +202,4 @@ O sistema recomenda livros considerando:
 - Separado por microserviços
 - Ideal para desenvolvimento e testes
 
-### Manutenção
 
-Para reiniciar o banco de dados:
-- Delete os arquivos `.db`
-- Reinicie os serviços
-- Os bancos são recriados automaticamente com dados iniciais
